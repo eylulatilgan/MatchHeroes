@@ -13,12 +13,19 @@ public class ScoreManager : MonoBehaviour {
     {
         GameEvents.OnScore += OnScore;
         GameEvents.OnGameOver += OnGameOver;
+        GameEvents.OnResetGame += resetScore;
     }
 
     void OnDisable()
     {
         GameEvents.OnScore -= OnScore;
         GameEvents.OnGameOver -= OnGameOver;
+        GameEvents.OnResetGame -= resetScore;
+    }
+
+    private void resetScore()
+    {
+        scoreText.text = "0";
     }
 
     private void OnScore(int score)

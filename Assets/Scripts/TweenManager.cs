@@ -15,6 +15,8 @@ public class TweenManager : MonoBehaviour {
     [SerializeField]
     private RectTransform creditsButton;
     [SerializeField]
+    private RectTransform pauseButton;
+    [SerializeField]
     private RectTransform headerText;
     [SerializeField]
     private Transform mainCamera;
@@ -26,10 +28,14 @@ public class TweenManager : MonoBehaviour {
     private RectTransform scoreText;
     [SerializeField]
     private RectTransform gameOverPanel;
-  
+    [SerializeField]
+    private RectTransform pausePanel;
+
 
     private TweenParty visibleMenuParty;
     private TweenParty invisibleMenuParty;
+
+    private bool restart = true;
 
     void Awake()
     {
@@ -101,14 +107,21 @@ public class TweenManager : MonoBehaviour {
         InitInvisibleMenuParty();
         scoreText.ZKanchoredPositionTo(new Vector2(0f, -50f)).setDelay(2).setDuration(1).start();
         invisibleMenuParty.start();
-        TriggerEvents();
+        if(restart)
+            TriggerEvents();
+        mainCamera.ZKpositionTo(new Vector3(0f, 11f, -1f), 1f).setAnimationCurve(slowingCurve).start();
+        pauseButton.ZKanchoredPositionTo(new Vector2(-30f, 40f), 1f).setAnimationCurve(slowingCurve).start();
+    }
+
+    public void Pause()
+    {
+        pausePanel.ZKanchoredPositionTo(new Vector2(0f, 0f), 1f).setAnimationCurve(slowingCurve).start();
     }
 
     public void TriggerEvents()
     {
         GameEvents.TriggerHandSpawn();
-        GameEvents.TriggerInitBoard();
-        mainCamera.ZKpositionTo(new Vector3(0f, 11f,-1f), 1f).setAnimationCurve(slowingCurve).start();
+        GameEvents.TriggerInitBoard();        
     }
 
     void OnEnable()
@@ -126,12 +139,25 @@ public class TweenManager : MonoBehaviour {
         gameOverPanel.ZKpositionTo(new Vector2(0f, 0f), 1f).setAnimationCurve(slowingCurve).start();
     }
 
-    public void ReturnToTheMainMenu()
+    public void resumeGame()
     {
-        //gameOverPanel.ZKpositionTo(new Vector2(0f, 500f), 1f).setAnimationCurve(slowingCurve).start();
-        GameEvents.TriggerResetGameState();
+        restart = false;
+        pausePanel.ZKanchoredPositionTo(new Vector2(0f, 500f), 1f).setAnimationCurve(slowingCurve).start();
         mainCamera.ZKpositionTo(new Vector3(0f, 0f, -1f), 1f).setAnimationCurve(slowingCurve).start();
         scoreText.ZKanchoredPositionTo(new Vector2(0f, 50f)).setDuration(1).start();
+        InitVisibleMenuParty();
+        visibleMenuParty.start();
+        pauseButton.ZKanchoredPositionTo(new Vector2(30f, 40f), 1f).setAnimationCurve(slowingCurve).start();
+    }
+
+    public void restartGame()
+    {
+        restart = true;
+        GameEvents.TriggerResetGameState();
+        pausePanel.ZKanchoredPositionTo(new Vector2(0f, 500f), 1f).setAnimationCurve(slowingCurve).start();
+        mainCamera.ZKpositionTo(new Vector3(0f, 0f, -1f), 1f).setAnimationCurve(slowingCurve).start();
+        scoreText.ZKanchoredPositionTo(new Vector2(0f, 50f)).setDuration(1).start();
+        pauseButton.ZKanchoredPositionTo(new Vector2(30f, 40f), 1f).setAnimationCurve(slowingCurve).start();
         InitVisibleMenuParty();
         visibleMenuParty.start();
     }

@@ -193,7 +193,7 @@ public class BoardManager : MonoBehaviour
 
         if(tileControllersToDestroy.Count >= 3)
         {
-            DestroyCharsOnTiles();
+            DestroyHeroesOnTiles();
         }        
     }
 
@@ -266,7 +266,7 @@ public class BoardManager : MonoBehaviour
         return false;
     }
 
-    public void DestroyCharsOnTiles()
+    public void DestroyHeroesOnTiles()
     {
         foreach (TileController tileController in tileControllersToDestroy)
         {
